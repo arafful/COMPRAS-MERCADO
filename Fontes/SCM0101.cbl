@@ -30,37 +30,72 @@
        WORKING-STORAGE SECTION.
       *
        01 WS-REG-TIPO-PRODUTO.
-           05 WS-COD-TIPO                PIC 9(02).
-           05 WS-DESC-TIPO               PIC X(50).
-
-       01 WS-REGISTRO-CONTATO                  PIC X(22) VALUE SPACES.
-       01 FILLER REDEFINES WS-REGISTRO-CONTATO.
-           03 WS-ID-CONTATO                    PIC 9(02).
-           03 WS-NM-CONTATO                    PIC X(20).
+           05 WS-COD-TIPO                      PIC X(10).
+           05 WS-DESC-TIPO                     PIC X(50).
       *
        77 WS-FS-TP-PRODUTO                     PIC 9(02).
            88 WS-FS-OK                         VALUE ZEROS.
            88 WS-FS-NAO-EXISTE                 VALUE 35.
       *
-       77 WS-EOF                               PIC X(01).
-           88 EOF-OK                           VALUE "S" FALSE "N".
+       77 WS-RESPOSTA-TELA                     PIC X(01).
+           88 FLAG-SAIR                        VALUE "Q".
+           88 FLAG-GRAVAR                      VALUE "S".
       *
-       77 WS-EXIT                              PIC X(01).
-           88 EXIT-OK                          VALUE "S" FALSE "N".
+       77 WS-MENSAGEM                          PIC X(30) VALUE SPACES.
+       77 WS-PROMPT                            PIC X(01) VALUE SPACES.
+      *
+       SCREEN SECTION.
+      *
+       01 SS-CABECALHO-TELA.
+           05 VALUE ".================================================."
+                   BLANK SCREEN                LINE 01 COL 10.
+           05 VALUE "|"                        LINE 02 COL 10.
+           05 VALUE "CADASTRO DE TIPOS DE PRODUTOS"
+                                               LINE 02 COL 20.
+           05 VALUE "|"                        LINE 02 COL 59.
+           05 VALUE "+------------------------------------------------+"
+                                               LINE 03 COL 10.
+           05 VALUE "|"                        LINE 04 COL 10.
+           05 VALUE "INCLUSAO"
+                                               LINE 04 COL 31.
+           05 VALUE "|"                        LINE 04 COL 59.
+           05 VALUE "+================================================+"
+                                               LINE 05 COL 10.
+      *
+       01  SS-TELA-DE-DADOS.
+           05 VALUE "|"                        LINE 06 COL 10.
+           05 VALUE "|"                        LINE 06 COL 59.
+           05 VALUE "|"                        LINE 07 COL 10.
+           05 VALUE "Tipo produto..:"          LINE 07 COL 12.
+           05 VALUE "|"                        LINE 07 COL 59.
+           05 VALUE "|"                        LINE 08 COL 10.
+           05 VALUE "|"                        LINE 08 COL 59.
+           05 VALUE "|"                        LINE 09 COL 10.
+           05 VALUE "Descricao tipo:"          LINE 09 COL 12.
+           05 VALUE "|"                        LINE 09 COL 59.
+           05 VALUE "|"                        LINE 10 COL 10.
+           05 VALUE "|"                        LINE 10 COL 59.
+           05 VALUE "+================================================+"
+                                               LINE 11 COL 10.
+      *
+       01  SS-CONFIRMACAO-ENTRADA.
+           05 VALUE "DIGITE <S> PARA CONFIRMAR / <Q> PARA SAIR [ ]"
+                                               LINE 12 COL 12.
+      *
+       01  SS-LINHA-DE-MENSAGEM.
+           05 SS-MENSAGEM              PIC X(30) USING WS-MENSAGEM
+                                               LINE 14 COL 12.
       *
        PROCEDURE DIVISION.
        MAIN-PROCEDURE.
 
            PERFORM P100-INICIALIZA THRU P100-FIM.
 
-           PERFORM P300-CADASTRA THRU P300-FIM UNTIL EXIT-OK.
+           PERFORM P300-CADASTRA THRU P300-FIM UNTIL FLAG-SAIR.
 
            PERFORM P900-FIM.
 
        P100-INICIALIZA.
-
-           DISPLAY "*** CADASTRO DE CONTATOS ***".
-           DISPLAY " ".
 
            SET WS-FS-OK           TO  TRUE.
 
@@ -71,42 +106,48 @@
            END-IF.
       *
            IF NOT WS-FS-OK THEN
-               DISPLAY "** ERRO NA ABERTURA DO ARQUIVO TP-PRODUTO ****"
-               DISPLAY "FILE STATUS: " WS-FS-TP-PRODUTO
-               DISPLAY "**********************************************"
+               MOVE "ERRO NA ABERTURA DO ARQUIVO"
+                                           TO WS-MENSAGEM
+               DISPLAY SS-LINHA-DE-MENSAGEM
+               ACCEPT WS-PROMPT LINE 14 COL 50
                PERFORM P900-FIM
            END-IF.
       *
        P100-FIM.
       *
        P300-CADASTRA.
-
-           DISPLAY "PARA CADASTRAR UM TIPO PRODUTO, INFORME:".
-           DISPLAY "Um numero para o identificador: ".
-           ACCEPT WS-COD-TIPO.
-           DISPLAY "DESCRIÇÃO.............: ".
-           ACCEPT WS-DESC-TIPO.
       *
-           MOVE WS-COD-TIPO                    TO COD-TIPO.
-           MOVE WS-DESC-TIPO                   TO DESC-TIPO.
+           MOVE SPACES                         TO WS-COD-TIPO.
+           MOVE SPACES                         TO WS-DESC-TIPO.
+      *
+           DISPLAY SS-CABECALHO-TELA.
+           DISPLAY SS-TELA-DE-DADOS.
+           DISPLAY SS-CONFIRMACAO-ENTRADA.
+      *
+           ACCEPT WS-COD-TIPO      LINE 07 COL 28.
+           ACCEPT WS-DESC-TIPO     LINE 09 COL 28.
+           ACCEPT WS-RESPOSTA-TELA LINE 12 COL 55.
+      *
+           IF FLAG-GRAVAR THEN
+               MOVE WS-COD-TIPO                    TO COD-TIPO
+               MOVE WS-DESC-TIPO                   TO DESC-TIPO
 
-           WRITE   REG-TIPO-PRODUTO.
-           IF NOT WS-FS-OK
-               DISPLAY "***************************************"
-               DISPLAY "ERRO NA GRAVACAO DO REGISTRO DE CONTATO"
-               DISPLAY "FILE STATUS: " WS-FS-TP-PRODUTO
-               DISPLAY "REGISTRO...: " WS-REG-TIPO-PRODUTO
-               DISPLAY "***************************************"
-               PERFORM P900-FIM
+               WRITE   REG-TIPO-PRODUTO
+               IF NOT WS-FS-OK
+                   IF WS-FS-TP-PRODUTO = 22 THEN
+                       MOVE "TIPO DE PRODUTO JÁ CADATRADO"
+                                           TO WS-MENSAGEM
+                       DISPLAY SS-LINHA-DE-MENSAGEM
+                       ACCEPT WS-PROMPT LINE 14 COL 50
+                   ELSE
+                       MOVE "ERRO NA GRAVACAO DO ARQUIVO"
+                                           TO WS-MENSAGEM
+                       DISPLAY SS-LINHA-DE-MENSAGEM
+                       ACCEPT WS-PROMPT LINE 14 COL 50
+                       PERFORM P900-FIM
+                   END-IF
+               END-IF
            END-IF.
-      *
-           DISPLAY " ".
-           DISPLAY "Tipo Produto cadastrado com sucesso!".
-           DISPLAY " ".
-
-           DISPLAY
-           "Tecle <S> para encerrar ou qualquer tecla para continuar: ".
-           ACCEPT WS-EXIT.
       *
        P300-FIM.
       *
