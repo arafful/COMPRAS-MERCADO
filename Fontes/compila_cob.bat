@@ -1,0 +1,1 @@
+cobc.exe -x -o bin\%1.exe -std=default -Wall -debug %1.cbl
