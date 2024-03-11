@@ -4,7 +4,7 @@
       * Purpose: CADASTRO DE TIPOS DE PRODUTOS - LISTAGEM
       ******************************************************************
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. SCM0102.
+       PROGRAM-ID. SCMP0102.
       *
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
@@ -139,4 +139,4 @@
        P900-FIM.
            CLOSE TP-PRODUTO.
            GOBACK.
-       END PROGRAM SCM0102.
+       END PROGRAM SCMP0102.

@@ -4,7 +4,7 @@
       * Purpose: CADASTRO DE TIPOS DE PRODUTOS - ALTERAÇÃO
       ******************************************************************
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. SCM0103.
+       PROGRAM-ID. SCMP0103.
       *
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
@@ -46,52 +46,39 @@
       *
        SCREEN SECTION.
       *
-       01 SS-CABECALHO-TELA.
-           05 VALUE ".================================================."
-                   BLANK SCREEN                LINE 01 COL 10.
-           05 VALUE "|"                        LINE 02 COL 10.
-           05 VALUE "CADASTRO DE TIPOS DE PRODUTOS"
-                                               LINE 02 COL 20.
-           05 VALUE "|"                        LINE 02 COL 59.
-           05 VALUE "+------------------------------------------------+"
-                                               LINE 03 COL 10.
-           05 VALUE "|"                        LINE 04 COL 10.
-           05 VALUE "ALTERACAO"
-                                               LINE 04 COL 31.
-           05 VALUE "|"                        LINE 04 COL 59.
-           05 VALUE "+================================================+"
-                                               LINE 05 COL 10.
+      *      *
+       01 SS-CLEAR-SCREEN.
+           05 BLANK SCREEN.
       *
-       01  SS-TELA-DE-DADOS.
-           05 VALUE "|"                        LINE 06 COL 10.
-           05 VALUE "|"                        LINE 06 COL 59.
-           05 VALUE "|"                        LINE 07 COL 10.
-           05 VALUE "Tipo produto..:"          LINE 07 COL 12.
-           05 VALUE "|"                        LINE 07 COL 59.
-           05 VALUE "|"                        LINE 08 COL 10.
-           05 VALUE "|"                        LINE 08 COL 59.
-           05 VALUE "|"                        LINE 09 COL 10.
-           05 VALUE "Descricao tipo:"          LINE 09 COL 12.
-           05 VALUE "|"                        LINE 09 COL 59.
-           05 VALUE "|"                        LINE 10 COL 10.
-           05 VALUE "|"                        LINE 10 COL 59.
-           05 VALUE "+================================================+"
-                                               LINE 11 COL 10.
-           05 VALUE "DIGITE <S> PARA CONFIRMAR / <Q> PARA SAIR [ ]"
-                                               LINE 12 COL 12.
-      *
-       01  SS-TELA-ALTERACAO.
-      *     05 LINE 15 COL 1 VALUE "TESTE".
-           05 SS-DESC-TIPO PIC X(50)
-               LINE 9 COL 28
-               USING WS-DESC-TIPO.
-      *
-           05 SS-CONFIRMACAO-OPERACAO PIC X(01)
-               LINE 12 COL 55.
+       01 SS-INPUT-SCREEN.
+           05 LINE 02 COL 05 VALUE "CADASTRO DE TIPOS DE PRODUTOS".
+           05 LINE 03 COL 05 VALUE "SMCP0103 - Alteracao".
+           05 LINE 04 COL 05 VALUE
+           "------------------------------------------------------------
+      -    "--------------".
+           05 LINE 06 COL 05 VALUE "Tipo Porduto..: ".
+      *     05 SS-COD-TIPO REVERSE-VIDEO PIC X(10)
+      *                     USING WS-COD-TIPO.
+           05 LINE 08 COL 05 VALUE "Desc Produto..: ".
+           05 SS-DESC-TIPO REVERSE-VIDEO PIC X(50)
+                           USING WS-DESC-TIPO.
+           05 LINE 10 COL 05 VALUE
+           "------------------------------------------------------------
+      -    "--------------".
+           05 LINE 11 COL 05 VALUE
+                           "<S> para confirmar ou <Q> para Sair. ".
+           05 SS-RESPOSTA-TELA REVERSE-VIDEO PIC X(01)
+                           USING WS-RESPOSTA-TELA.
+           05 LINE 12 COL 05 VALUE
+           "------------------------------------------------------------
+      -    "--------------".
       *
        01  SS-LINHA-DE-MENSAGEM.
            05 SS-MENSAGEM              PIC X(30) USING WS-MENSAGEM
-                                               LINE 14 COL 12.
+                                               LINE 13 COL 05.
+      *
+       01  SS-LIMPA-MENSAGEM.
+           05 LINE 13 BLANK LINE.
       *
        PROCEDURE DIVISION.
        MAIN-PROCEDURE.
@@ -112,7 +99,8 @@
                MOVE "ERRO NA ABERTURA DO ARQUIVO"
                                            TO WS-MENSAGEM
                DISPLAY SS-LINHA-DE-MENSAGEM
-               ACCEPT WS-PROMPT LINE 14 COL 50
+               ACCEPT WS-PROMPT AT 1301
+               DISPLAY SS-LIMPA-MENSAGEM
                PERFORM P900-FIM
            END-IF.
       *
@@ -122,15 +110,16 @@
       *
            MOVE SPACES                         TO WS-COD-TIPO.
            MOVE SPACES                         TO WS-DESC-TIPO.
+           MOVE SPACES                         TO WS-RESPOSTA-TELA.
       *
-           DISPLAY SS-CABECALHO-TELA.
-           DISPLAY SS-TELA-DE-DADOS.
-      *     DISPLAY SS-CONFIRMACAO-ENTRADA.
+           DISPLAY SS-CLEAR-SCREEN
+           DISPLAY SS-INPUT-SCREEN
+
+           ACCEPT  WS-COD-TIPO REVERSE-VIDEO AT 0621.
       *
-           ACCEPT WS-COD-TIPO      LINE 07 COL 28.
-           ACCEPT WS-RESPOSTA-TELA LINE 12 COL 55.
-      *
-           IF FLAG-CONTINUAR THEN
+           IF WS-COD-TIPO EQUAL SPACES THEN
+               MOVE "Q"                        TO WS-RESPOSTA-TELA
+           ELSE
                MOVE WS-COD-TIPO                    TO COD-TIPO
       *
                READ TP-PRODUTO  INTO    WS-REG-TIPO-PRODUTO
@@ -139,14 +128,16 @@
                            MOVE "TIPO DE PRODUTO NÃO EXISTE"
                                            TO WS-MENSAGEM
                            DISPLAY SS-LINHA-DE-MENSAGEM
-                           ACCEPT WS-PROMPT LINE 14 COL 50
+                           ACCEPT WS-PROMPT AT 1301
+                           DISPLAY SS-LIMPA-MENSAGEM
                        NOT INVALID KEY
                            MOVE SPACE              TO WS-RESPOSTA-TELA
+                           ACCEPT  SS-INPUT-SCREEN
       *----------------------------------------------------------------
-                           ACCEPT SS-TELA-ALTERACAO
+      *                     ACCEPT WS-DESC-TIPO     LINE 07 COL 18
+      *                     ACCEPT WS-RESPOSTA-TELA LINE 10 COL 44
       *----------------------------------------------------------------
                            IF FLAG-CONTINUAR THEN
-                               MOVE SS-DESC-TIPO   TO WS-DESC-TIPO
                                PERFORM P400-ATUALIZAR THRU P400-FIM
                            END-IF
                END-READ
@@ -164,12 +155,14 @@
                MOVE "ERRO NA ALTERACAO DO REGISTRO"
                                            TO WS-MENSAGEM
                DISPLAY SS-LINHA-DE-MENSAGEM
-               ACCEPT WS-PROMPT LINE 14 COL 50
+               ACCEPT WS-PROMPT AT 1301
+               DISPLAY SS-LIMPA-MENSAGEM
            ELSE
                MOVE "REGISTRO ATUALIZADO OK"
                                            TO WS-MENSAGEM
                DISPLAY SS-LINHA-DE-MENSAGEM
-               ACCEPT WS-PROMPT LINE 14 COL 50
+               ACCEPT WS-PROMPT AT 1301
+               DISPLAY SS-LIMPA-MENSAGEM
            END-IF.
       *
        P400-FIM.
@@ -177,4 +170,4 @@
        P900-FIM.
            CLOSE TP-PRODUTO.
            GOBACK.
-       END PROGRAM SCM0103.
+       END PROGRAM SCMP0103.
