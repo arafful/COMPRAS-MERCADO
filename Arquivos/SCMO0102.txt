@@ -1,0 +1,15 @@
+     ======================================================================
+     LISTAGEM DE TIPOS DE PRODUTOS
+     ======================================================================
+     CODIGO      DESCRICAO
+     ----------  --------------------------------------------------
+     ALIMENTOS   FARINHAS, CEREAIS E MASSAS
+     BAZAR       ARTIGOS DE BAZAR EM GERAL
+     BEBIDAS     CAFE, REFRIGERANTES, SUCOS E CERVEJAS
+     CARNES      BOVINOS, SUINOS AVES, PEIXES E LINGUICAS
+     ENLATADOS   AZEITE, OLEO E CONSERVAS EM GERAL
+     FRIOS       FRIOS E LATICINIOS
+     HORTIFRUTI  VERDURAS, LEGUMES, FRUTAS E OVOS
+     LIMPEZA     PRODUTOS DE LIMPEZA E HIGIENE
+     PAES        PAES, BISCOITOS E DOCES
+          REGISTROS LISTADOS: 009

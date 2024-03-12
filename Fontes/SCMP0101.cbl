@@ -33,16 +33,21 @@
            05 WS-COD-TIPO                      PIC X(10).
            05 WS-DESC-TIPO                     PIC X(50).
       *
-       77 WS-FS-TP-PRODUTO                     PIC 9(02).
-           88 WS-FS-OK                         VALUE ZEROS.
-           88 WS-FS-NAO-EXISTE                 VALUE 35.
+       77 WS-FS-TP-PRODUTO                     PIC X(02).
+           88 WS-FS-OK                         VALUE "00".
+           88 WS-FS-NAO-EXISTE                 VALUE "35".
       *
        77 WS-RESPOSTA-TELA                     PIC X(01).
            88 FLAG-SAIR                        VALUE "Q".
            88 FLAG-GRAVAR                      VALUE "S".
       *
-       77 WS-MENSAGEM                          PIC X(30) VALUE SPACES.
+       77 WS-MENSAGEM                          PIC X(50) VALUE SPACES.
        77 WS-PROMPT                            PIC X(01) VALUE SPACES.
+      *
+       LINKAGE SECTION.
+      *
+       01 LK-COM-AREA.
+           03 LK-MENSAGEM                      PIC X(20).
       *
        SCREEN SECTION.
       *
@@ -73,13 +78,14 @@
       -    "--------------".
       *
        01  SS-LINHA-DE-MENSAGEM.
-           05 SS-MENSAGEM              PIC X(30) USING WS-MENSAGEM
+           05 SS-MENSAGEM              PIC X(50) USING WS-MENSAGEM
                                                LINE 13 COL 05.
       *
        01  SS-LIMPA-MENSAGEM.
            05 LINE 13 BLANK LINE.
       *
-       PROCEDURE DIVISION.
+       PROCEDURE DIVISION USING LK-COM-AREA.
+      *
        MAIN-PROCEDURE.
 
            PERFORM P100-INICIALIZA THRU P100-FIM.
@@ -99,8 +105,8 @@
            END-IF.
       *
            IF NOT WS-FS-OK THEN
-               MOVE "ERRO NA ABERTURA DO ARQUIVO"
-                                           TO WS-MENSAGEM
+               STRING "ERRO NA ABERTURA DO ARQUIVO FS: "
+                       WS-FS-TP-PRODUTO    INTO WS-MENSAGEM
                DISPLAY SS-LINHA-DE-MENSAGEM
                ACCEPT WS-PROMPT AT 1301
                DISPLAY SS-LIMPA-MENSAGEM
@@ -131,7 +137,7 @@
 
                    WRITE   REG-TIPO-PRODUTO
                    IF NOT WS-FS-OK
-                       IF WS-FS-TP-PRODUTO = 22 THEN
+                       IF WS-FS-TP-PRODUTO = "22" THEN
                            MOVE "TIPO DE PRODUTO JÁ CADATRADO"
                                                        TO WS-MENSAGEM
                            DISPLAY SS-LINHA-DE-MENSAGEM

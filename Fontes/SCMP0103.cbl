@@ -33,20 +33,24 @@
            05 WS-COD-TIPO                      PIC X(10).
            05 WS-DESC-TIPO                     PIC X(50).
       *
-       77 WS-FS-TP-PRODUTO                     PIC 9(02).
-           88 WS-FS-OK                         VALUE ZEROS.
-           88 WS-FS-NAO-EXISTE                 VALUE 35.
+       77 WS-FS-TP-PRODUTO                     PIC X(02).
+           88 WS-FS-OK                         VALUE "00".
+           88 WS-FS-NAO-EXISTE                 VALUE "35".
       *
        77 WS-RESPOSTA-TELA                     PIC X(01).
            88 FLAG-SAIR                        VALUE "Q".
            88 FLAG-CONTINUAR                   VALUE "S".
       *
-       77 WS-MENSAGEM                          PIC X(30) VALUE SPACES.
+       77 WS-MENSAGEM                          PIC X(50) VALUE SPACES.
        77 WS-PROMPT                            PIC X(01) VALUE SPACES.
+      *
+       LINKAGE SECTION.
+      *
+       01 LK-COM-AREA.
+           03 LK-MENSAGEM                      PIC X(20).
       *
        SCREEN SECTION.
       *
-      *      *
        01 SS-CLEAR-SCREEN.
            05 BLANK SCREEN.
       *
@@ -80,7 +84,8 @@
        01  SS-LIMPA-MENSAGEM.
            05 LINE 13 BLANK LINE.
       *
-       PROCEDURE DIVISION.
+       PROCEDURE DIVISION USING LK-COM-AREA.
+      *
        MAIN-PROCEDURE.
 
            PERFORM P100-INICIALIZA THRU P100-FIM.
@@ -96,7 +101,7 @@
            OPEN I-O TP-PRODUTO
       *
            IF NOT WS-FS-OK THEN
-               MOVE "ERRO NA ABERTURA DO ARQUIVO"
+               MOVE "ERRO NA ABERTURA DO ARQUIVO FS"
                                            TO WS-MENSAGEM
                DISPLAY SS-LINHA-DE-MENSAGEM
                ACCEPT WS-PROMPT AT 1301
@@ -133,10 +138,6 @@
                        NOT INVALID KEY
                            MOVE SPACE              TO WS-RESPOSTA-TELA
                            ACCEPT  SS-INPUT-SCREEN
-      *----------------------------------------------------------------
-      *                     ACCEPT WS-DESC-TIPO     LINE 07 COL 18
-      *                     ACCEPT WS-RESPOSTA-TELA LINE 10 COL 44
-      *----------------------------------------------------------------
                            IF FLAG-CONTINUAR THEN
                                PERFORM P400-ATUALIZAR THRU P400-FIM
                            END-IF
@@ -151,7 +152,7 @@
 
            REWRITE REG-TIPO-PRODUTO.
 
-           IF WS-FS-TP-PRODUTO NOT EQUAL ZEROS THEN
+           IF WS-FS-TP-PRODUTO NOT EQUAL "00" THEN
                MOVE "ERRO NA ALTERACAO DO REGISTRO"
                                            TO WS-MENSAGEM
                DISPLAY SS-LINHA-DE-MENSAGEM
