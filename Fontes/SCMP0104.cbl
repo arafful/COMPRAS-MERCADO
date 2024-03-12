@@ -96,7 +96,8 @@
 
        P100-INICIALIZA.
 
-           SET WS-FS-OK           TO  TRUE.
+           SET WS-FS-OK            TO  TRUE.
+           MOVE SPACES             TO WS-RESPOSTA-TELA.
 
            OPEN I-O TP-PRODUTO
       *
