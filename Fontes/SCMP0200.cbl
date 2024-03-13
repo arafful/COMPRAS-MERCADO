@@ -1,7 +1,7 @@
       ******************************************************************
       * Author: ANDRE RAFFUL
       * Date: 19/10/2023
-      * Purpose: MENU PRINCIPAL DO SISTEMA DE COMPRAS DE MERCADO
+      * Purpose: MENU DO CADASTRO DE PRODUTOS
       * Alterações: 99/99/9999 - XXXXXXXX<autor>XXXXXXXXXX
       *             XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
       *             XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -10,7 +10,7 @@
       *             XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
       ******************************************************************
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. SCMP0000.
+       PROGRAM-ID. SCMP0200.
       *
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
@@ -33,26 +33,32 @@
        77 WS-EXIT                              PIC X(01).
            88 EXIT-OK                          VALUE "S" FALSE "N".
       *
+       LINKAGE SECTION.
+      *
+       01 LK-COM-AREA.
+           03 LK-MENSAGEM                      PIC X(20).
+      *
        SCREEN SECTION.
-       01 SS-CLEAR-SCREEN.
+           01 SS-CLEAR-SCREEN.
            05 BLANK SCREEN.
       *
-       01 SS-MAIN-MANU-SCREEN.
+       01 SS-MENU-SCREEN.
            05 LINE 02 COL 05 VALUE "SISTEMA DE COMPRAS DE MERCADO".
-           05 LINE 03 COL 05 VALUE "SMCP0000 - Menu Principal".
+           05 LINE 03 COL 05 VALUE
+                   "SMCP0200 - Menu do Cadastro de Produtos".
            05 LINE 04 COL 05 VALUE
            "------------------------------------------------------------
       -    "--------------".
            05 LINE 06 COL 05 VALUE
-                             "<1> - CADASTRO DE TIPOS DE PRODUTOS".
+                             "<1> - INCLUSAO DE PRODUTOS".
            05 LINE 07 COL 05 VALUE
-                             "<2> - CADASTRO DE PRODUTOS".
+                             "<2> - RELATORIO DE PRODUTOS".
            05 LINE 08 COL 05 VALUE
-                             "<3> - CADASTRO DE PRECOS DE PRODUTOS".
+                             "<3> - ALTERACAO DE PRODUTOS".
            05 LINE 09 COL 05 VALUE
-                             "<4> - CADASTRO DE LISTAS DE COMPRAS".
+                             "<4> - EXCLUSAO DE PRODUTOS".
            05 LINE 10 COL 05 VALUE
-                             "<Q> - FINALIZAR".
+                             "<Q> - RETORNAR MENU PRINCIPAL".
            05 LINE 12 COL 05 VALUE
            "------------------------------------------------------------
       -    "--------------".
@@ -64,29 +70,35 @@
            "------------------------------------------------------------
       -    "--------------".
       *
-       PROCEDURE DIVISION.
+       PROCEDURE DIVISION USING LK-COM-AREA.
+      *
        MAIN-PROCEDURE.
 
            SET EXIT-OK                         TO FALSE.
-
+      *
            PERFORM UNTIL EXIT-OK
-               INITIALIZE                          WS-OPCAO-MENU
+               MOVE SPACES                     TO WS-OPCAO-MENU
       *
                DISPLAY SS-CLEAR-SCREEN
-               DISPLAY SS-MAIN-MANU-SCREEN
-               ACCEPT  SS-MAIN-MANU-SCREEN
+               DISPLAY SS-MENU-SCREEN
+               ACCEPT  SS-MENU-SCREEN
       *
                EVALUATE WS-OPCAO-MENU
                    WHEN "1"
-                       CALL "SCMP0100" USING WS-COM-AREA
+                       CALL "SCMP0210" USING WS-COM-AREA
                    WHEN "2"
-                       CALL "SCMP0200" USING WS-COM-AREA
+                       DISPLAY "RELATORIO EM EXECUCAO. AGUARDE."
+                                           AT 1505
+                       CALL "SCMP0220" USING WS-COM-AREA
+                       DISPLAY "RELATORIO CONCLUIDO            "
+                                           AT 1505
+                       ACCEPT WS-PROMPT    AT 1537
                    WHEN "3"
-      *                CALL "SCMP0300" USING WS-COM-AREA
+      *                 CALL "SCMP0230" USING WS-COM-AREA
                        DISPLAY "ROTINA NAO DISPONIVEL" AT 1505
                        ACCEPT WS-PROMPT AT 1527
                    WHEN "4"
-      *                CALL "SCMP0400" USING WS-COM-AREA
+      *                 CALL "SCMP0240" USING WS-COM-AREA
                        DISPLAY "ROTINA NAO DISPONIVEL" AT 1505
                        ACCEPT WS-PROMPT AT 1527
                    WHEN "Q"
@@ -99,4 +111,4 @@
            END-PERFORM.
 
            GOBACK.
-       END PROGRAM SCMP0000.
+       END PROGRAM SCMP0200.
