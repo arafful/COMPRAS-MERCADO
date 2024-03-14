@@ -94,13 +94,9 @@
                                            AT 1505
                        ACCEPT WS-PROMPT    AT 1537
                    WHEN "3"
-      *                 CALL "SCMP0230" USING WS-COM-AREA
-                       DISPLAY "ROTINA NAO DISPONIVEL" AT 1505
-                       ACCEPT WS-PROMPT AT 1527
+                       CALL "SCMP0230" USING WS-COM-AREA
                    WHEN "4"
-      *                 CALL "SCMP0240" USING WS-COM-AREA
-                       DISPLAY "ROTINA NAO DISPONIVEL" AT 1505
-                       ACCEPT WS-PROMPT AT 1527
+                       CALL "SCMP0240" USING WS-COM-AREA
                    WHEN "Q"
                        SET EXIT-OK             TO TRUE
                    WHEN "q"

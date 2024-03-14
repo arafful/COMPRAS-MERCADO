@@ -3,8 +3,6 @@
 ================================================================================
   TIPO       CODIGO PRODUTO  DESCRICAO
   ---------- --------------- --------------------------------------------------
-  BAZAR      PERFEX          PANOS DESCARTAVEIS TIPO SCOTT
   CARNES     7891515486846   NUGGET FRANGO SADIA 700 GRAMAS
-  FRIOS      78980127786301  MANTEIGA PJ 500 GRAMAS
   PAES       7896002363792   MASSA PULLMAN RAP 10
-  REGISTROS LISTADOS: 004
+  REGISTROS LISTADOS: 002
