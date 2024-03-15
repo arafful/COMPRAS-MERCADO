@@ -1,6 +1,6 @@
        01  REG-PRECO-PRODUTO.
-           05 CHAVE-PRECO-PRODUTO      PIC X(22).
-               10 FK-COD-PRODUTO       PIC X(14)
+           05 CHAVE-PRECO-PRODUTO.
+               10 FK-COD-PRODUTO       PIC X(14).
                10 DATA-PRECO           PIC X(08).
                10 DATA-PRECO-DDMMAAAA REDEFINES DATA-PRECO.
                    15 ANO-PRECO        PIC 9(04).
