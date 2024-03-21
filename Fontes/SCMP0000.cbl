@@ -46,11 +46,11 @@
            05 LINE 06 COL 05 VALUE
                              "<1> - CADASTRO DE TIPOS DE PRODUTOS".
            05 LINE 07 COL 05 VALUE
-                             "<2> - CADASTRO DE PRODUTOS".
+                             "<2> - CARGA DE PRODUTOS".
            05 LINE 08 COL 05 VALUE
-                             "<3> - CADASTRO DE PRECOS DE PRODUTOS".
+                             "<3> - CARGA DE PRECOS DE PRODUTOS".
            05 LINE 09 COL 05 VALUE
-                             "<4> - CADASTRO DE LISTAS DE COMPRAS".
+                             "<4> - RELATORIOS".
            05 LINE 10 COL 05 VALUE
                              "<Q> - FINALIZAR".
            05 LINE 12 COL 05 VALUE
@@ -82,7 +82,9 @@
                    WHEN "2"
                        CALL "SCMP0200" USING WS-COM-AREA
                    WHEN "3"
-                      CALL "SCMP0300" USING WS-COM-AREA
+      *                CALL "SCMP0300" USING WS-COM-AREA
+                       DISPLAY "ROTINA NAO DISPONIVEL" AT 1505
+                       ACCEPT WS-PROMPT AT 1527
                    WHEN "4"
       *                CALL "SCMP0400" USING WS-COM-AREA
                        DISPLAY "ROTINA NAO DISPONIVEL" AT 1505

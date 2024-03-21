@@ -1,7 +1,7 @@
       ******************************************************************
       * Author: ANDRE RAFFUL
       * Date: 04/03/2024
-      * Purpose: CADASTRO DE PRODUTOS - INCLUSAO
+      * Purpose: CADASTRO DE PRECOS DE PRODUTOS - INCLUSAO
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID. SCMP0310.
@@ -80,10 +80,15 @@
            88 WS-FS-PROD-OK                    VALUE "00".
            88 WS-FS-PROD-NAO-EXISTE            VALUE "35".
       *
+       01 WS-LINHA-PRECO.
+           05 FILLER                           PIC X(02) VALUE "R$".
+           05 WS-LINHA-VALOR                   PIC 9(05)V99 VALUE ZEROS.
+      *
        77 WS-RESPOSTA-TELA                     PIC X(01).
            88 FLAG-SAIR                        VALUE "Q".
            88 FLAG-GRAVAR                      VALUE "S".
       *
+       77 WS-VLR-CHAR                          PIC X(08) VALUE SPACES.
        77 WS-MENSAGEM                          PIC X(50) VALUE SPACES.
        77 WS-PROMPT                            PIC X(01) VALUE SPACES.
        77 WS-VALIDA-PRODUTO                    PIC X(01) VALUE SPACES.
@@ -116,7 +121,8 @@
            05 SS-DATA-PRECO-TELA REVERSE-VIDEO PIC X(10)
                            USING WS-DATA-PRECO-TELA.
            05 LINE 10 COL 05 VALUE "Preco de Produto....: ".
-           05 LINE 10 COL 27 REVERSE-VIDEO USING WS-VLR-PRECO.
+           05 SS-VLR-CHAR REVERSE-VIDEO PIC X(08)
+                           USING WS-VLR-CHAR.
            05 LINE 11 COL 05 VALUE
            "------------------------------------------------------------
       -    "--------------".
@@ -322,14 +328,19 @@
       *
        P430-VALIDA-VALOR-PRECO.
       *
-           MOVE SPACES                     TO WS-VALIDA-VALOR-PRECO.
+           MOVE SPACES                         TO WS-VALIDA-VALOR-PRECO.
+           MOVE FUNCTION NUMVAL(WS-VLR-CHAR)
+                                               TO WS-VLR-PRECO
 
            IF WS-VLR-PRECO <= ZERO THEN
-               MOVE "VALOR DO PRODUTO INVALIDO"        TO WS-MENSAGEM
+               MOVE "VALOR DO PRODUTO INVALIDO"
+                                               TO WS-MENSAGEM
                DISPLAY SS-LINHA-DE-MENSAGEM
                ACCEPT WS-PROMPT AT 1401
                DISPLAY SS-LIMPA-MENSAGEM
            ELSE
+               MOVE WS-VLR-PRECO   TO WS-LINHA-VALOR
+               DISPLAY WS-LINHA-PRECO AT 1050
                SET FLAG-VALOR-PRECO-VALIDO     TO TRUE
            END-IF.
       *
