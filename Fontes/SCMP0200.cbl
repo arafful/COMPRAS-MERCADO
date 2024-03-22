@@ -1,7 +1,7 @@
       ******************************************************************
       * Author: ANDRE RAFFUL
-      * Date: 04/03/2024
-      * Purpose: CADASTRO DE PRODUTOS - INCLUSAO
+      * Date: 21/03/2024
+      * Purpose: CADASTRO DE PRODUTOS - CARGA
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID. SCMP0200.

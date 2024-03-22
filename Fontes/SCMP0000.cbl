@@ -82,9 +82,7 @@
                    WHEN "2"
                        CALL "SCMP0200" USING WS-COM-AREA
                    WHEN "3"
-      *                CALL "SCMP0300" USING WS-COM-AREA
-                       DISPLAY "ROTINA NAO DISPONIVEL" AT 1505
-                       ACCEPT WS-PROMPT AT 1527
+                       CALL "SCMP0300" USING WS-COM-AREA
                    WHEN "4"
       *                CALL "SCMP0400" USING WS-COM-AREA
                        DISPLAY "ROTINA NAO DISPONIVEL" AT 1505
