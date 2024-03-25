@@ -1,7 +1,7 @@
       ******************************************************************
       * Author: ANDRE RAFFUL
-      * Date: 01/03/2024
-      * Purpose: MENU PRINCIPAL DO SISTEMA DE COMPRAS DE MERCADO
+      * Date: 25/03/2024
+      * Purpose: MENU DE RELATORIOS DO SISTEMA DE COMPRAS DE MERCADO
       * Alterações: 99/99/9999 - XXXXXXXX<autor>XXXXXXXXXX
       *             XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
       *             XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -10,7 +10,7 @@
       *             XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
       ******************************************************************
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. SCMP0000.
+       PROGRAM-ID. SCMP0400.
       *
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
@@ -33,26 +33,32 @@
        77 WS-EXIT                              PIC X(01).
            88 EXIT-OK                          VALUE "S" FALSE "N".
       *
+       LINKAGE SECTION.
+      *
+       01 LK-COM-AREA.
+           03 LK-MENSAGEM                      PIC X(20).
+      *
        SCREEN SECTION.
-       01 SS-CLEAR-SCREEN.
+           01 SS-CLEAR-SCREEN.
            05 BLANK SCREEN.
       *
-       01 SS-MAIN-MANU-SCREEN.
+       01 SS-MENU-SCREEN.
            05 LINE 02 COL 05 VALUE "SISTEMA DE COMPRAS DE MERCADO".
-           05 LINE 03 COL 05 VALUE "SMCP0000 - Menu Principal".
+           05 LINE 03 COL 05 VALUE
+                   "SMCP0400 - Menu de Relatorios do SCM".
            05 LINE 04 COL 05 VALUE
            "------------------------------------------------------------
       -    "--------------".
            05 LINE 06 COL 05 VALUE
-                             "<1> - CADASTRO DE TIPOS DE PRODUTOS".
+                             "<1> - LISTA DE COMPRAS".
            05 LINE 07 COL 05 VALUE
-                             "<2> - CARGA DE PRODUTOS".
-           05 LINE 08 COL 05 VALUE
-                             "<3> - CARGA DE PRECOS DE PRODUTOS".
-           05 LINE 09 COL 05 VALUE
-                             "<4> - RELATORIOS".
+                             "<2> - LISTA CADASTRO DE PRECOS".
+      *     05 LINE 08 COL 05 VALUE
+      *                       "<3> - ALTERACAO DE TIPOS DE PRODUTOS".
+      *     05 LINE 09 COL 05 VALUE
+      *                       "<4> - EXCLUSAO DE TIPOS DE PRODUTOS".
            05 LINE 10 COL 05 VALUE
-                             "<Q> - FINALIZAR".
+                             "<Q> - RETORNAR MENU PRINCIPAL".
            05 LINE 12 COL 05 VALUE
            "------------------------------------------------------------
       -    "--------------".
@@ -64,29 +70,28 @@
            "------------------------------------------------------------
       -    "--------------".
       *
-       PROCEDURE DIVISION.
+       PROCEDURE DIVISION USING LK-COM-AREA.
+      *
        MAIN-PROCEDURE.
 
            SET EXIT-OK                         TO FALSE.
-
+      *
            PERFORM UNTIL EXIT-OK
-               INITIALIZE                          WS-OPCAO-MENU
+               MOVE SPACES                     TO WS-OPCAO-MENU
       *
                DISPLAY SS-CLEAR-SCREEN
-               DISPLAY SS-MAIN-MANU-SCREEN
-               ACCEPT  SS-MAIN-MANU-SCREEN
+               DISPLAY SS-MENU-SCREEN
+               ACCEPT  SS-MENU-SCREEN
       *
                EVALUATE WS-OPCAO-MENU
                    WHEN "1"
-                       CALL "SCMP0100" USING WS-COM-AREA
+                       CALL "SCMP0410" USING WS-COM-AREA
                    WHEN "2"
-                       CALL "SCMP0200" USING WS-COM-AREA
-                   WHEN "3"
-                       CALL "SCMP0300" USING WS-COM-AREA
-                   WHEN "4"
-                       CALL "SCMP0400" USING WS-COM-AREA
-      *                 DISPLAY "ROTINA NAO DISPONIVEL" AT 1505
-      *                 ACCEPT WS-PROMPT AT 1527
+                       CALL "SCMP0420" USING WS-COM-AREA
+      *             WHEN "3"
+      *                 CALL "SCMP0430" USING WS-COM-AREA
+      *             WHEN "4"
+      *                 CALL "SCMP0440" USING WS-COM-AREA
                    WHEN "Q"
                        SET EXIT-OK             TO TRUE
                    WHEN "q"
@@ -97,4 +102,4 @@
            END-PERFORM.
 
            GOBACK.
-       END PROGRAM SCMP0000.
+       END PROGRAM SCMP0400.
