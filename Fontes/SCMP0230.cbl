@@ -42,7 +42,7 @@
        WORKING-STORAGE SECTION.
       *
        01 WS-REG-PRODUTO.
-           05 WS-COD-PRODUTO                   PIC X(14).
+           05 WS-COD-PRODUTO                   PIC X(13).
            05 WS-DESC-PRODUTO                  PIC X(50).
            05 WS-FK-COD-TIPO                   PIC X(10).
       *

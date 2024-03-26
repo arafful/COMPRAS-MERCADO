@@ -1,5 +1,5 @@
  ===================================================================================
- SMCO0410 - LISTA DE COMPRAS                                     EMISSAO: 26/03/2024
+ SMCO0420 - CADASTRO DE PRECOS                                   EMISSAO: 26/03/2024
  ===================================================================================
  TIPO PRODUTO  PRODUTO       DESCRICAO                      DATA COMPRA        PRECO
  ============= ============= ============================== =========== ============
@@ -17,6 +17,7 @@
                7898226513564 SACO DE LIXO EMBALIXO 50 LITRO  01/03/2024   R$   36.99
                7898930672472 PAPEL ALUMINIO WYDA 45 CM       01/03/2024   R$   10.99
  BEBIDAS       7891991001373 GUARANA ANTARTICA ZERO 2 L      23/03/2024   R$    8.49
+                                                             01/03/2024   R$    7.99
                7896000554369 SUCO DE CAJU MAGUARY CONCENTRA  01/03/2024   R$    5.49
  CARNES                 3258 SALSICHA PERDIGAO HOT DOG KG    23/03/2024   R$   12.87
                         3906 COXAO DURO MOIDO BANDEJA 500 G  01/03/2024   R$   17.49
@@ -31,7 +32,7 @@
  ENLATADOS     5601252118519 AZEITE GALLO 500 ML             01/03/2024   R$   31.99
                7891031412176 MAIONESE HEMMER 500 G           01/03/2024   R$    6.99
                7896007811403 MOLHO INGLES KENKO              01/03/2024   R$    3.99
-               7896102500493 ERVILHA QURO 170 G              01/03/2024   R$    3.49
+               7896102500493 ERVILHA QUERO 170 GRAMAS        01/03/2024   R$    3.49
                7896102500608 MILHO VERDE QUERO 170 G         01/03/2024   R$    3.49
                7897517209674 SELETA DE LEGUMES FUNGINI       01/03/2024   R$    5.99
                7898594420129 PALMITO JUDITI                  01/03/2024   R$   12.99
@@ -39,7 +40,9 @@
                7898930142654 MOLHO SALSARETTI SACHE          01/03/2024   R$    2.49
                7898943163066 ATUM ROBSON CRUSOE 170 G        01/03/2024   R$    7.59
  FRIOS                  2863 PRESUNTO AURORA MAGRO 1 KG      23/03/2024   R$   27.47
-                        2990 QUEIJO MUSSARELA TOROLEZ FATIA  23/03/2024   R$   47.89
+                                                             01/03/2024   R$   26.89
+                        2990 QUEIJO MUSSARELA TIROLEZ FATIA  23/03/2024   R$   47.89
+                                                             01/03/2024   R$   59.87
                7891000126905 CREME DE LEITE NESTLE           01/03/2024   R$    4.99
                7893000025653 PATE PERU SADIA 100 G           23/03/2024   R$    3.99
                7893000079298 MARGARINA QUALY 1 KG            01/03/2024   R$   13.99
@@ -65,4 +68,4 @@
                7896003738636 BISCOITO MARILAN AGUA E SAL     01/03/2024   R$    6.69
                7898043740044 PAO HOT DOG DE PANES 500 G 8 U  23/03/2024   R$    7.99
  -----------------------------------------------------------------------------------
-          REGISTROS LISTADOS: 061
+          REGISTROS LISTADOS: 064

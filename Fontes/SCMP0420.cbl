@@ -1,10 +1,10 @@
       ******************************************************************
       * Author: ANDRE RAFFUL
       * Date: 04/03/2024
-      * Purpose: RELATORIO DE LISTA DE COMPRAS
+      * Purpose: RELATORIO DO CADASTRO DE PRECOS
       ******************************************************************
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. SCMP0410.
+       PROGRAM-ID. SCMP0420.
       *
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
@@ -30,9 +30,9 @@
                 RECORD KEY     IS CHAVE-PRECO-PRODUTO
                 FILE STATUS    IS WS-FS-PRC-PRODUTO.
       *
-           SELECT SCMO0410     ASSIGN TO
+           SELECT SCMO0420     ASSIGN TO
                "F:\Meus Docs - Disco Rigido\Desenv\Meus Projetos\COMPRAS
-      -        "-MERCADO\Arquivos\SCMO0410.txt"
+      -        "-MERCADO\Arquivos\SCMO0420.txt"
                 ORGANIZATION   IS LINE SEQUENTIAL
                 ACCESS         IS SEQUENTIAL.
       *
@@ -53,7 +53,7 @@
            COPY "F:\Meus Docs - Disco Rigido\Desenv\Meus Projetos\COMPRA
       -         "S-MERCADO\Copybooks\PrcProduto.cpy".
       *
-       FD SCMO0410.
+       FD SCMO0420.
        01 REG-REPORT                           PIC X(100).
       *
        SD SORT-REGISTRO.
@@ -101,10 +101,19 @@
            05 WS-CD-PRD-ANT                    PIC X(13).
            05 WS-DT-CMP-ANT                    PIC X(08).
       *
-       01 WS-EDITA-DATA-PRECO.
+       01 WS-EDITA-DATA.
            05 WS-EDITA-AAAA                    PIC X(04).
            05 WS-EDITA-MM                      PIC X(02).
            05 WS-EDITA-DD                      PIC X(02).
+      *
+       01 WS-DATA-CORRENTE.
+           05 WS-AAAA-CORRENTE                 PIC 9(04).
+           05 WS-MM-CORRENTE                   PIC 9(02).
+           05 WS-DD-CORRENTE                   PIC 9(02).
+      *
+       77 WS-FLAG-IMPRIME                     PIC X(01).
+           88 88-NAO-IMPRIME                   VALUE "N".
+           88 88-IMPRIME                       VALUE "S".
       *
        77 WS-FIM-DE-ARQUIVO                    PIC X(01).
            88 FLAG-EOF                         VALUE "S".
@@ -119,10 +128,10 @@
       *
            03 WS-LST-CAB-2.
                05 FILLER   PIC X(01) VALUE SPACES.
-               05 FILLER   PIC X(11) VALUE "SMCO0410 - ".
-               05 FILLER   PIC X(16) VALUE
-                                       "LISTA DE COMPRAS".
-               05 FILLER   PIC X(37) VALUE SPACES.
+               05 FILLER   PIC X(11) VALUE "SMCO0420 - ".
+               05 FILLER   PIC X(18) VALUE
+                                       "CADASTRO DE PRECOS".
+               05 FILLER   PIC X(35) VALUE SPACES.
                05 FILLER   PIC X(09) VALUE "EMISSAO: ".
                05 WS-CAB-DT-SIS
                            PIC X(10) VALUE SPACES.
@@ -156,6 +165,11 @@
                05 FILLER   PIC X(01) VALUE SPACES.
                05 FILLER   PIC X(12) VALUE ALL "=".
       *
+           03 WS-LST-LINHA.
+               05 FILLER   PIC X(01) VALUE SPACES.
+               05 FILLER   PIC X(83) VALUE ALL "-".
+               05 FILLER   PIC X(01) VALUE SPACES.
+      *
            03 WS-DET-REPORT.
                05 FILLER               PIC X(01) VALUE SPACES.
                05 WS-DET-PRD           PIC X(13) VALUE SPACES.
@@ -164,7 +178,7 @@
                05 FILLER               PIC X(01) VALUE SPACES.
                05 WS-DET-DSC-PRD       PIC X(30) VALUE SPACES.
                05 FILLER               PIC X(02) VALUE SPACES.
-               05 WS-DET-DT-PRC        PIC X(10) VALUE SPACES.
+               05 WS-DET-DT-PRC        PIC X(12) VALUE SPACES.
                05 FILLER               PIC X(03) VALUE " R$".
                05 WS-DET-VLR-PRC       PIC Z(5).99.
       *
@@ -237,7 +251,7 @@
       *
        P140-ABRE-RELATORIO-SAIDA.
       *
-           OPEN OUTPUT SCMO0410.
+           OPEN OUTPUT SCMO0420.
       *
        P140-FIM.
       *
@@ -326,6 +340,8 @@
       *
            MOVE ZERO       TO  WS-LISTA-QTD-REG.
       *
+           PERFORM P530-DATA-DO-SISTEMA THRU P530-FIM.
+      *
            WRITE REG-REPORT    FROM WS-LST-CAB-1.
            WRITE REG-REPORT    FROM WS-LST-CAB-2.
            WRITE REG-REPORT    FROM WS-LST-CAB-3.
@@ -336,13 +352,13 @@
       *
        P520-GERA-REPORT.
 
+           SET 88-IMPRIME              TO  TRUE.
            MOVE WS-SD-TIPO-PRODUTO     TO  WS-DET-PRD.
-           MOVE WS-SD-COD-PRODUTO      TO  WS-DET-COD-PRD
-                                           WS-DET-COD-PRD.
+           MOVE WS-SD-COD-PRODUTO      TO  WS-DET-COD-PRD.
       *
            MOVE WS-SD-DESC-PRODUTO     TO  WS-DET-DSC-PRD.
       *
-           MOVE WS-SD-DATA-COMPRA      TO  WS-EDITA-DATA-PRECO.
+           MOVE WS-SD-DATA-COMPRA      TO  WS-EDITA-DATA.
       *
            STRING  WS-EDITA-DD "/"
                    WS-EDITA-MM "/"
@@ -362,21 +378,31 @@
                END-IF
            END-IF.
       *
-           WRITE REG-REPORT FROM WS-DET-REPORT.
+           WRITE REG-REPORT FROM WS-DET-REPORT
+           ADD 1                       TO  WS-LISTA-QTD-REG
       *
            MOVE WS-SD-TIPO-PRODUTO     TO  WS-TP-PRD-ANT.
            MOVE WS-SD-COD-PRODUTO      TO  WS-CD-PRD-ANT.
            MOVE WS-SD-DATA-COMPRA      TO  WS-DT-CMP-ANT.
-
-           ADD 1                       TO  WS-LISTA-QTD-REG.
       *
        P520-FIM.
+      *
+       P530-DATA-DO-SISTEMA.
+      *
+           ACCEPT  WS-DATA-CORRENTE FROM DATE YYYYMMDD.
+
+           STRING  WS-DD-CORRENTE "/"
+                   WS-MM-CORRENTE "/"
+                   WS-AAAA-CORRENTE    INTO    WS-CAB-DT-SIS.
+      *
+       P530-FIM.
       *
        P590-FINALIZA-REPORT.
 
            IF WS-LISTA-QTD-REG = ZERO THEN
                WRITE REG-REPORT        FROM WS-LST-FINAL-0
            ELSE
+               WRITE REG-REPORT        FROM WS-LST-LINHA
                WRITE REG-REPORT        FROM WS-LST-FINAL-1
            END-IF.
 
@@ -385,6 +411,6 @@
        P900-FIM.
            CLOSE   PRODUTO
                    PRC-PRODUTO
-                   SCMO0410.
+                   SCMO0420.
            GOBACK.
-       END PROGRAM SCMP0410.
+       END PROGRAM SCMP0420.
